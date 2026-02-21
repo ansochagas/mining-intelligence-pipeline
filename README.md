@@ -144,4 +144,6 @@ npm run dev
 
 ## Observacao sobre credenciais
 
-As credenciais nao sao versionadas. O repositório inclui apenas `.env.example`.
+As credenciais nao sao versionadas.
+O repositorio inclui apenas `.env.example`.
+Para execucao local, crie `.env.local` com credenciais proprias ou temporarias.
