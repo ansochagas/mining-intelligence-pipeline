@@ -1,0 +1,36 @@
+{
+  "name": "mining-intelligence-pipeline",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "run:single": "node --conditions=react-server --import tsx scripts/run-single-company.ts",
+    "search:test": "node --conditions=react-server --import tsx scripts/test-semantic-search.ts",
+    "cost:estimate": "node --conditions=react-server --import tsx scripts/estimate-monthly-cost.ts",
+    "chunks:backfill": "node --conditions=react-server --import tsx scripts/backfill-raw-chunks.ts",
+    "assets:reextract": "node --conditions=react-server --import tsx scripts/reextract-assets-from-raw.ts"
+  },
+  "dependencies": {
+    "next": "16.1.6",
+    "openai": "^6.22.0",
+    "pg": "^8.18.0",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "server-only": "^0.0.1",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/pg": "^8.16.0",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.1.6",
+    "tsx": "^4.21.0",
+    "typescript": "^5"
+  }
+}

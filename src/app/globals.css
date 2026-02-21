@@ -1,0 +1,33 @@
+:root {
+  --surface: #fdfcf8;
+  --text: #1f1c17;
+}
+
+html,
+body {
+  max-width: 100vw;
+  min-height: 100%;
+  overflow-x: clip;
+}
+
+body {
+  color: var(--text);
+  background: var(--surface);
+  font-family: var(--font-manrope), sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
