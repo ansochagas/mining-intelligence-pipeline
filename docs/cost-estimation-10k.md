@@ -1,31 +1,31 @@
-# Estimativa de Custo - 10.000 Empresas/Mes
+# Cost Estimate - 10,000 Companies/Month
 
-Data de referencia: 21 de fevereiro de 2026.
+Reference date: February 21, 2026.
 
-## Objetivo
+## Objective
 
-Estimar o custo operacional mensal do pipeline para processar 10.000 empresas.
+Estimate monthly operating cost for processing 10,000 companies.
 
-A estimativa usa:
+The estimate uses:
 
-- metricas reais do banco (coletadas localmente)
-- precos oficiais da OpenAI e da Firecrawl
-- cenarios de operacao (conservador, base e otimizado com cache)
+- real metrics from the database (collected locally)
+- official pricing from OpenAI and Firecrawl
+- operation scenarios (conservative, baseline, and cache-optimized)
 
-## Fontes Oficiais de Preco
+## Official Pricing Sources
 
-- OpenAI pricing (modelo `gpt-4.1` e embeddings):  
+- OpenAI pricing (`gpt-4.1` and embeddings):  
   https://platform.openai.com/docs/pricing
-- Firecrawl pricing (planos e creditos):  
+- Firecrawl pricing (plans and credits):  
   https://www.firecrawl.dev/pricing
-- Firecrawl search credits (2 creditos por 10 resultados):  
+- Firecrawl search credits (2 credits per 10 results):  
   https://docs.firecrawl.dev/features/search
-- Firecrawl scrape credits (1 credito por pagina):  
+- Firecrawl scrape credits (1 credit per page):  
   https://docs.firecrawl.dev/usage-guide
 
-## Metodologia
+## Methodology
 
-Comando executado:
+Executed command:
 
 ```bash
 npm run cost:estimate -- --companies 10000
@@ -35,66 +35,66 @@ Script:
 
 - `scripts/estimate-monthly-cost.ts`
 
-Metricas observadas no banco (amostra atual):
+Observed database metrics (current sample):
 
-- empresas amostradas: `5`
-- media de documentos por empresa: `6.8`
-- media de tamanho por documento: `11,917` caracteres
-- media de chunks por documento: `14.29`
-- media de tokens por chunk: `110.09`
+- sampled companies: `5`
+- average documents per company: `6.8`
+- average document size: `11,917` characters
+- average chunks per document: `14.29`
+- average tokens per chunk: `110.09`
 
-Premissas economicas usadas no script:
+Economic assumptions used in the script:
 
 - OpenAI `gpt-4.1` input: `$2.00 / 1M tokens`
 - OpenAI `gpt-4.1` output: `$8.00 / 1M tokens`
 - OpenAI `text-embedding-3-small`: `$0.02 / 1M tokens`
-- Firecrawl search: `2` creditos por `10` resultados
-- Firecrawl scrape: `1` credito por pagina
-- `2` buscas por empresa (leadership + assets)
-- `12` resultados por busca
+- Firecrawl search: `2` credits per `10` results
+- Firecrawl scrape: `1` credit per page
+- `2` searches per company (`leadership` + `assets`)
+- `12` results per search
 
-## Resultado (10.000 empresas/mes)
+## Result (10,000 companies/month)
 
-### 1) Conservador
+### 1) Conservative
 
-- docs/empresa: `8.5`
+- docs/company: `8.5`
 - cache hit: `0%`
-- Firecrawl: `133,000` creditos/mes
-- plano estimado Firecrawl: `Standard` com overage (`1` pacote)
-- custo Firecrawl: `$130.00`
-- custo OpenAI: `$1,160.25`
-- custo total: `$1,290.25 / mes`
+- Firecrawl: `133,000` credits/month
+- estimated Firecrawl plan: `Standard` with overage (`1` package)
+- Firecrawl cost: `$130.00`
+- OpenAI cost: `$1,160.25`
+- total cost: `$1,290.25 / month`
 
-### 2) Base
+### 2) Baseline
 
-- docs/empresa: `6.8`
+- docs/company: `6.8`
 - cache hit: `0%`
-- Firecrawl: `116,000` creditos/mes
-- plano estimado Firecrawl: `Standard` com overage (`1` pacote)
-- custo Firecrawl: `$130.00`
-- custo OpenAI: `$804.44`
-- custo total: `$934.44 / mes`
+- Firecrawl: `116,000` credits/month
+- estimated Firecrawl plan: `Standard` with overage (`1` package)
+- Firecrawl cost: `$130.00`
+- OpenAI cost: `$804.44`
+- total cost: `$934.44 / month`
 
-### 3) Otimizado com Cache
+### 3) Cache-Optimized
 
-- docs/empresa: `6.12`
+- docs/company: `6.12`
 - cache hit: `35%`
-- Firecrawl: `87,780` creditos/mes
-- plano estimado Firecrawl: `Standard` sem overage
-- custo Firecrawl: `$83.00`
-- custo OpenAI: `$449.91`
-- custo total: `$532.91 / mes`
+- Firecrawl: `87,780` credits/month
+- estimated Firecrawl plan: `Standard` without overage
+- Firecrawl cost: `$83.00`
+- OpenAI cost: `$449.91`
+- total cost: `$532.91 / month`
 
-## Leitura Executiva
+## Executive Summary
 
-- faixa estimada: **$532.91 a $1,290.25 / mes**
-- cenario base atual: **$934.44 / mes**
-- maior componente de custo: **tokens de extracao (`gpt-4.1`)**
-- embeddings (`text-embedding-3-small`) sao custo baixo no desenho atual
+- estimated range: **$532.91 to $1,290.25 / month**
+- current baseline scenario: **$934.44 / month**
+- highest cost component: **extraction tokens (`gpt-4.1`)**
+- embeddings (`text-embedding-3-small`) are a low-cost component in the current design
 
-## Observacoes Importantes
+## Important Notes
 
-- Os valores variam com a qualidade de discovery e tamanho das paginas.
-- Valores de Firecrawl podem mudar por plano/regiao/faturamento.
-- A amostra atual tem 5 empresas; ampliar amostra continua melhorando confianca.
-- O script permite recalculo rapido a cada ajuste do pipeline.
+- Values vary with discovery quality and page size.
+- Firecrawl prices may change by plan/region/billing.
+- Current sample size is 5 companies; expanding the sample keeps improving confidence.
+- The script allows quick recalculation after each pipeline adjustment.

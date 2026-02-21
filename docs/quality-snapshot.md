@@ -1,20 +1,20 @@
 # Quality Snapshot
 
-Data de referencia: 21 de fevereiro de 2026.
+Reference date: February 21, 2026.
 
-## Escopo
+## Scope
 
-Snapshot operacional do pipeline para avaliar:
+Operational snapshot of the pipeline to evaluate:
 
-- cobertura funcional ponta a ponta
-- integridade de dados
-- qualidade de extracao estruturada
-- cobertura semantica (pgvector)
-- custo estimado para 10.000 empresas/mes
+- end-to-end functional coverage
+- data integrity
+- structured extraction quality
+- semantic coverage (`pgvector`)
+- estimated cost for 10,000 companies/month
 
-## Como foi medido
+## How It Was Measured
 
-Comandos executados:
+Executed commands:
 
 ```bash
 npm run lint
@@ -26,21 +26,21 @@ npm run assets:reextract
 npm run cost:estimate -- --companies 10000
 ```
 
-Auditoria SQL adicional:
+Additional SQL audit:
 
-- consistencia de chaves e vinculos entre `sources`, `raw_documents`, `assets`, `company_people`, `raw_chunks`
-- cobertura de `raw_chunks` por `raw_document`
-- qualidade de preenchimento em lideranca e ativos
+- key consistency and links across `sources`, `raw_documents`, `assets`, `company_people`, `raw_chunks`
+- `raw_chunks` coverage by `raw_document`
+- field completeness quality for leadership and assets
 
-## Resultado atual
+## Current Result
 
-### 1) Cobertura funcional
+### 1) Functional Coverage
 
-- pipeline E2E com empresa nova: **ok** (`Fortescue`)
-- APIs principais (`/api/run`, `/api/companies`, `/api/companies/:id`, `/api/search`): **ok**
-- UI exibindo dados persistidos: **ok**
+- End-to-end pipeline with a new company: **ok** (`Fortescue`)
+- Main APIs (`/api/run`, `/api/companies`, `/api/companies/:id`, `/api/search`): **ok**
+- UI displaying persisted data: **ok**
 
-### 2) Volume atual no banco
+### 2) Current Database Volume
 
 - companies: **5**
 - sources: **34**
@@ -49,63 +49,63 @@ Auditoria SQL adicional:
 - assets: **110**
 - raw_chunks: **486**
 
-### 3) Integridade relacional
+### 3) Relational Integrity
 
-Todos os checks criticos estao em **0** inconsistencias:
+All critical checks are at **0** inconsistencies:
 
 - `raw_documents.company_id` vs `sources.company_id`
 - `assets.company_id` vs `sources.company_id`
 - `company_people.company_id` vs `sources.company_id`
 - `raw_chunks.company_id` vs `raw_documents.company_id`
 
-### 4) Qualidade de extracao
+### 4) Extraction Quality
 
-Lideranca:
+Leadership:
 
 - unknown type: **0.00%**
 - missing title: **0.00%**
 
-Ativos:
+Assets:
 
 - unknown status: **23.64%** (26/110)
 - missing country: **15.45%**
 
-Observacao:
+Note:
 
-- unknown status caiu de **31.25%** para **23.64%** apos reextracao conservadora de ativos por `raw_documents`.
+- Unknown status dropped from **31.25%** to **23.64%** after conservative asset re-extraction from `raw_documents`.
 
-### 5) Cobertura semantica (pgvector)
+### 5) Semantic Coverage (`pgvector`)
 
-- docs com chunks: **34/34 (100.00%)**
-- cobertura anterior: **52.94%**
-- ganho apos backfill: **+47.06 p.p.**
+- docs with chunks: **34/34 (100.00%)**
+- previous coverage: **52.94%**
+- gain after backfill: **+47.06 p.p.**
 
-### 6) Qualidade de discovery
+### 6) Discovery Quality
 
-- fontes low-priority (dominios penalizados): **2.94%** (1/34)
-- empresas com ambos tipos de fonte (`leadership` + `assets`): **5/5**
+- low-priority sources (penalized domains): **2.94%** (1/34)
+- companies with both source types (`leadership` + `assets`): **5/5**
 
-### 7) Custo estimado (10.000 empresas/mes)
+### 7) Estimated Cost (10,000 companies/month)
 
-- conservador: **$1,290.25/mes**
-- base: **$934.44/mes**
-- otimizado com cache: **$532.91/mes**
+- conservative: **$1,290.25/month**
+- baseline: **$934.44/month**
+- cache-optimized: **$532.91/month**
 
-Leitura:
+Interpretation:
 
-- cenario base permanece abaixo de **$1k/mes**.
+- baseline scenario remains below **$1k/month**.
 
-## Conclusao
+## Conclusion
 
-Estado atual: **apto para entrega tecnica**.
+Current state: **ready for technical delivery**.
 
-Pontos fortes:
+Strengths:
 
-- pipeline estavel, idempotente e observavel
-- modelagem relacional consistente
-- busca semantica com cobertura total dos documentos atuais
-- custo base competitivo para o escopo
+- stable, idempotent, and observable pipeline
+- consistent relational model
+- semantic search with full coverage of current documents
+- competitive baseline cost for the requested scope
 
-Risco residual principal:
+Main residual risk:
 
-- parte dos ativos ainda permanece com `status = unknown` quando a fonte nao traz sinal claro.
+- a portion of assets still remains with `status = unknown` when source pages do not provide clear signals.
