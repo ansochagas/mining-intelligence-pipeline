@@ -1,48 +1,48 @@
 # Mining Intelligence Pipeline
 
-Projeto de teste tecnico para montar um pipeline de inteligencia em mineracao.
+I built this project as a technical assessment to show an end-to-end automation pipeline for mining intelligence.
 
-O sistema recebe empresas, descobre paginas publicas, extrai dados estruturados (lideranca e ativos), salva no PostgreSQL e disponibiliza consulta via API/UI. O bonus de busca semantica usa `pgvector`.
+The system takes a list of mining companies, discovers relevant public pages, extracts structured data (leadership and assets), stores results in PostgreSQL, and exposes everything through API + UI. Semantic search is included as an optional bonus using `pgvector`.
 
-## O que esta entregue
+## What Is Included
 
-- pipeline E2E: discover -> scrape -> extracao -> persistencia
-- deduplicacao por hash de conteudo e cache por fonte
-- API: `/api/run`, `/api/companies`, `/api/companies/:id`, `/api/search`
-- UI para executar pipeline, acompanhar resultados e consultar empresas
-- estimativa de custo para 10.000 empresas/mes
-- qualidade consolidada em snapshot tecnico
+- End-to-end pipeline: discover -> scrape -> extract -> persist
+- Content hash deduplication and source cache support
+- API endpoints: `/api/run`, `/api/companies`, `/api/companies/:id`, `/api/search`
+- UI to run the pipeline and inspect persisted company results
+- Cost estimate for 10,000 companies/month
+- Technical quality snapshot and documented trade-offs
 
-Referencias:
+Reference docs:
 
 - `docs/trade-offs.md`
 - `docs/quality-snapshot.md`
 - `docs/cost-estimation-10k.md`
 
-## Stack
+## Tech Stack
 
 - Next.js (App Router) + TypeScript
-- PostgreSQL (Neon) com `pg`
-- Validacao de entrada/saida com `zod`
-- Scrape e discovery com Firecrawl
-- Extracao e embeddings com OpenAI
-- Busca semantica em `pgvector` (tabela `raw_chunks`)
+- PostgreSQL (Neon) with `pg`
+- Input/output validation with `zod`
+- Web discovery and scraping via Firecrawl
+- Structured extraction and embeddings via OpenAI
+- Semantic search with `pgvector` (`raw_chunks` table)
 
-## Requisitos
+## Requirements
 
 - Node.js 20+
 - npm 10+
-- PostgreSQL (Neon recomendado)
+- PostgreSQL (Neon recommended)
 
-## Setup rapido
+## Quick Setup
 
-1. Instalar dependencias:
+1. Install dependencies:
 
 ```bash
 npm install
 ```
 
-2. Criar ambiente local:
+2. Create your local env file:
 
 PowerShell:
 
@@ -56,18 +56,18 @@ Bash:
 cp .env.example .env.local
 ```
 
-3. Preencher variaveis em `.env.local`.
+3. Fill `.env.local`.
 
-Obrigatorias para subir API/UI:
+Required to run API/UI:
 
 - `DATABASE_URL`
 
-Obrigatorias para rodar pipeline e busca semantica:
+Required to run the pipeline and semantic search:
 
 - `OPENAI_API_KEY`
 - `FIRECRAWL_API_KEY`
 
-Opcionais (com default):
+Optional (defaults):
 
 - `SCRAPE_CACHE_TTL_HOURS` (`24`)
 - `CHUNK_TARGET_CHARS` (`1000`)
@@ -76,72 +76,72 @@ Opcionais (com default):
 - `EMBEDDING_BATCH_SIZE` (`16`)
 - `SEARCH_TOP_K` (`8`)
 
-4. Aplicar schema:
+4. Apply database schema:
 
 ```sql
 \i database/init.sql
 ```
 
-No Neon, pode executar o conteudo de `database/init.sql` no SQL Editor.
+If you are using Neon, run the contents of `database/init.sql` in the SQL Editor.
 
-5. Rodar aplicacao:
+5. Start the app:
 
 ```bash
 npm run dev
 ```
 
-6. Healthcheck:
+6. Optional health check:
 
 - `GET http://localhost:3000/api/health/db`
 
-## Fluxo de uso (manual)
+## Manual Usage Flow
 
-1. Acesse `http://localhost:3000`.
-2. Informe empresas separadas por virgula.
-3. Clique em `Run Pipeline`.
-4. Abra `Ver detalhes` para validar lideranca, ativos e fontes.
-5. Teste busca semantica na mesma tela (`/api/search` por tras).
+1. Open `http://localhost:3000`.
+2. Enter company names separated by commas.
+3. Click `Run Pipeline`.
+4. Open `View details` for each company to inspect leadership, assets, and sources.
+5. Test semantic search from the same screen (`/api/search` behind the UI).
 
-## Endpoints principais
+## Main Endpoints
 
 - `POST /api/run`
-  - body: `{ "input": "BHP, Rio Tinto" }`
-  - processamento sequencial por empresa
-  - inclui cache e dedupe por hash
+  - Body: `{ "input": "BHP, Rio Tinto" }`
+  - Sequential processing per company
+  - Includes cache and hash-based dedupe
 
 - `GET /api/companies`
-  - lista empresas processadas
+  - Lists processed companies
 
 - `GET /api/companies/:id`
-  - empresa + lideranca + ativos + fontes
+  - Returns company + leadership + assets + sources
 
 - `GET /api/search?q=...&limit=...`
-  - busca semantica em `raw_chunks`
+  - Semantic search over `raw_chunks`
 
 - `GET /api/health/db`
-  - conectividade com banco
+  - Database connectivity check
 
-## Scripts uteis
+## Useful Scripts
 
 - `npm run dev`
 - `npm run build`
 - `npm run start`
 - `npm run lint`
 - `npm run typecheck`
-- `npm run run:single -- "<empresa>"`
-- `npm run search:test -- "<consulta>"`
+- `npm run run:single -- "<company>"`
+- `npm run search:test -- "<query>"`
 - `npm run chunks:backfill`
 - `npm run assets:reextract`
 - `npm run cost:estimate -- --companies 10000`
 
-## Evidencias de entrega
+## Delivery Evidence
 
-- `docs/quality-snapshot.md`: indicadores atuais de qualidade e integridade
-- `docs/cost-estimation-10k.md`: metodologia e custo para 10k/mes
-- `docs/trade-offs.md`: decisoes tecnicas, riscos e mitigacoes
+- `docs/quality-snapshot.md`: current quality and integrity indicators
+- `docs/cost-estimation-10k.md`: methodology and cost estimate for 10k/month
+- `docs/trade-offs.md`: engineering decisions, risks, and mitigations
 
-## Observacao sobre credenciais
+## Credentials Note
 
-As credenciais nao sao versionadas.
-O repositorio inclui apenas `.env.example`.
-Para execucao local, crie `.env.local` com credenciais proprias ou temporarias.
+Credentials are not versioned.
+This repository includes only `.env.example`.
+For local execution, create `.env.local` with your own keys (or temporary keys).
