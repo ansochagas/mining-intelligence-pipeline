@@ -15,7 +15,6 @@ O sistema recebe empresas, descobre paginas publicas, extrai dados estruturados 
 
 Referencias:
 
-- `docs/phase-0-alinhamento.md`
 - `docs/trade-offs.md`
 - `docs/quality-snapshot.md`
 - `docs/cost-estimation-10k.md`
@@ -139,8 +138,7 @@ npm run dev
 
 - `docs/quality-snapshot.md`: indicadores atuais de qualidade e integridade
 - `docs/cost-estimation-10k.md`: metodologia e custo para 10k/mes
-- `docs/final-delivery-checklist.md`: checklist final de entrega
-- `docs/loom-script.md`: roteiro de video
+- `docs/trade-offs.md`: decisoes tecnicas, riscos e mitigacoes
 
 ## Observacao sobre credenciais
 
