@@ -102,12 +102,12 @@ export default function Home() {
       const data = (await response.json()) as { companies?: CompanyListItem[]; error?: string };
 
       if (!response.ok) {
-        throw new Error(data.error ?? "Falha ao carregar empresas.");
+        throw new Error(data.error ?? "Failed to load companies.");
       }
 
       setCompanies(data.companies ?? []);
     } catch (error) {
-      const message = error instanceof Error ? error.message : "Erro desconhecido ao carregar empresas.";
+      const message = error instanceof Error ? error.message : "Unknown error while loading companies.";
       setErrorMessage(message);
     } finally {
       setLoadingCompanies(false);
@@ -117,7 +117,7 @@ export default function Home() {
   async function handleRun() {
     const normalized = input.trim();
     if (!normalized) {
-      setErrorMessage("Informe ao menos uma empresa.");
+      setErrorMessage("Please provide at least one company.");
       return;
     }
 
@@ -134,13 +134,13 @@ export default function Home() {
 
       const data = (await response.json()) as RunSummary & { error?: string; message?: string };
       if (!response.ok) {
-        throw new Error(data.message ?? data.error ?? "Falha ao executar pipeline.");
+        throw new Error(data.message ?? data.error ?? "Failed to run pipeline.");
       }
 
       setSummary(data);
       await refreshCompanies();
     } catch (error) {
-      const message = error instanceof Error ? error.message : "Erro desconhecido na execucao.";
+      const message = error instanceof Error ? error.message : "Unknown execution error.";
       setErrorMessage(message);
     } finally {
       setRunning(false);
@@ -150,7 +150,7 @@ export default function Home() {
   async function handleSearch() {
     const query = searchQuery.trim();
     if (!query) {
-      setSearchError("Informe uma consulta semantica.");
+      setSearchError("Please provide a semantic query.");
       return;
     }
 
@@ -167,12 +167,12 @@ export default function Home() {
       };
 
       if (!response.ok) {
-        throw new Error(data.message ?? data.error ?? "Falha na busca semantica.");
+        throw new Error(data.message ?? data.error ?? "Semantic search failed.");
       }
 
       setSearchResults(data.results ?? []);
     } catch (error) {
-      const message = error instanceof Error ? error.message : "Erro desconhecido na busca semantica.";
+      const message = error instanceof Error ? error.message : "Unknown semantic search error.";
       setSearchError(message);
     } finally {
       setSearching(false);
@@ -184,15 +184,11 @@ export default function Home() {
       <main className={styles.main}>
         <section className={styles.hero}>
           <p className={styles.eyebrow}>Mining Intelligence Pipeline</p>
-          <p className={styles.description}>
-            Envie uma lista de empresas separadas por virgula. O sistema descobre fontes publicas,
-            aplica scraping, extracao estruturada e persiste em PostgreSQL com idempotencia por hash.
-          </p>
         </section>
 
         <section className={styles.panel}>
           <label className={styles.label} htmlFor="companies-input">
-            Empresas de mineracao
+            Mining companies
           </label>
           <textarea
             id="companies-input"
@@ -216,14 +212,14 @@ export default function Home() {
 
         <section className={styles.searchPanel}>
           <label className={styles.label} htmlFor="semantic-search-input">
-            Busca semantica (pgvector)
+            Semantic search (pgvector)
           </label>
           <input
             id="semantic-search-input"
             className={styles.searchInput}
             value={searchQuery}
             onChange={(event) => setSearchQuery(event.target.value)}
-            placeholder="Ex.: copper operations in Chile"
+            placeholder="e.g. copper operations in Chile"
             disabled={searching}
           />
           <div className={styles.actions}>
@@ -253,7 +249,7 @@ export default function Home() {
               </article>
             ))}
             {searchResults.length === 0 && !searching ? (
-              <p className={styles.emptySearch}>Nenhum resultado de busca ainda.</p>
+              <p className={styles.emptySearch}>No search results yet.</p>
             ) : null}
           </div>
         </section>
@@ -262,36 +258,36 @@ export default function Home() {
 
         {summary && totals ? (
           <section className={styles.summary}>
-            <h2>Resumo da execucao</h2>
+            <h2>Execution summary</h2>
             <p>
-              Janela: {new Date(summary.startedAt).toLocaleString()} {"->"}{" "}
-              {new Date(summary.finishedAt).toLocaleString()}
+              Window: {new Date(summary.startedAt).toLocaleString("en-US")} {"->"}{" "}
+              {new Date(summary.finishedAt).toLocaleString("en-US")}
             </p>
             <div className={styles.metrics}>
-              <MetricCard label="Descobertas" value={totals.discovered} />
+              <MetricCard label="Discovered" value={totals.discovered} />
               <MetricCard label="Scrapes" value={totals.scraped} />
               <MetricCard label="Skip Cache" value={totals.cache} />
               <MetricCard label="Skip Hash" value={totals.skipped} />
               <MetricCard label="Chunks" value={totals.chunks} />
               <MetricCard label="Emb Fail" value={totals.embeddingFailures} />
-              <MetricCard label="Lideranca" value={totals.people} />
-              <MetricCard label="Ativos" value={totals.assets} />
-              <MetricCard label="Falhas" value={totals.failed} />
+              <MetricCard label="Leadership" value={totals.people} />
+              <MetricCard label="Assets" value={totals.assets} />
+              <MetricCard label="Failures" value={totals.failed} />
             </div>
             <div className={styles.resultList}>
               {summary.results.map((item) => (
                 <article key={`${item.companyName}-${item.companyId ?? "none"}`} className={styles.resultItem}>
                   <header>
                     <h3>{item.companyName}</h3>
-                    {item.companyId ? <Link href={`/companies/${item.companyId}`}>Ver detalhes</Link> : null}
+                    {item.companyId ? <Link href={`/companies/${item.companyId}`}>View details</Link> : null}
                   </header>
                   <p>
-                    Descobertas: {item.discoveredSources} | Scrapes: {item.scrapedSources} | Skip Cache:{" "}
+                    Discovered: {item.discoveredSources} | Scrapes: {item.scrapedSources} | Skip Cache:{" "}
                     {item.skippedByCache} | Skip Hash: {item.skippedByHash}
                   </p>
                   <p>
-                    Lideranca: {item.leadershipRecords} | Ativos: {item.assetRecords} | Chunks:{" "}
-                    {item.chunkRecords} | Emb Fail: {item.embeddingFailures} | Falhas: {item.failedSources}
+                    Leadership: {item.leadershipRecords} | Assets: {item.assetRecords} | Chunks:{" "}
+                    {item.chunkRecords} | Emb Fail: {item.embeddingFailures} | Failures: {item.failedSources}
                   </p>
                   {item.errors.length > 0 ? (
                     <ul>
@@ -308,18 +304,18 @@ export default function Home() {
 
         <section className={styles.companies}>
           <div className={styles.companiesHeader}>
-            <h2>Empresas processadas</h2>
-            <span>{loadingCompanies ? "Loading..." : `${companies.length} registradas`}</span>
+            <h2>Processed companies</h2>
+            <span>{loadingCompanies ? "Loading..." : `${companies.length} registered`}</span>
           </div>
           <div className={styles.companyList}>
             {companies.map((company) => (
               <Link className={styles.companyItem} key={company.id} href={`/companies/${company.id}`}>
                 <strong>{company.name}</strong>
-                <span>{new Date(company.created_at).toLocaleString()}</span>
+                <span>{new Date(company.created_at).toLocaleString("en-US")}</span>
               </Link>
             ))}
             {companies.length === 0 && !loadingCompanies ? (
-              <p className={styles.emptyState}>Nenhuma empresa processada ainda.</p>
+              <p className={styles.emptyState}>No processed companies yet.</p>
             ) : null}
           </div>
         </section>

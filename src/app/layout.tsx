@@ -15,7 +15,7 @@ const ibmPlexMono = IBM_Plex_Mono({
 
 export const metadata: Metadata = {
   title: "Mining Intelligence Pipeline",
-  description: "Pipeline automatizado para descoberta, scraping e extracao estruturada de empresas de mineracao.",
+  description: "Automated pipeline for discovery, scraping, and structured extraction of mining company data.",
 };
 
 export default function RootLayout({
@@ -24,7 +24,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR">
+    <html lang="en">
       <body className={`${manrope.variable} ${ibmPlexMono.variable}`}>
         {children}
       </body>
