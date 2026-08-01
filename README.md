@@ -1,5 +1,36 @@
 # Mining Intelligence Pipeline
 
+> End-to-end AI and data pipeline for web discovery, structured extraction, PostgreSQL persistence, traceable sources, and semantic search.
+
+This project demonstrates how fragmented public information can be transformed into structured, searchable, and auditable intelligence.
+
+It was designed as both a technical implementation and a product exercise involving scope definition, cost analysis, traceability, risk management, and documented trade-offs.
+
+## Product and technical decisions
+
+- Traceability over opaque answers: extracted information remains connected to its public sources.
+- Structured outputs: leadership and asset information are validated before persistence.
+- Cost awareness: the project includes an operating-cost estimate for processing 10,000 companies per month.
+- Controlled duplication: source caching and content hashes reduce unnecessary processing.
+- Progressive complexity: semantic search is optional rather than a dependency for the core pipeline.
+- Explicit trade-offs: engineering decisions, limitations, risks, and mitigation options are documented.
+
+## My role
+
+I was responsible for the end-to-end definition and implementation of the project, including:
+
+- problem decomposition and scope definition;
+- pipeline and data-model decisions;
+- API and interface design;
+- structured extraction and validation;
+- source traceability;
+- semantic-search implementation;
+- cost estimation;
+- quality review;
+- documentation of risks and trade-offs.
+
+The project reflects my approach as a Technical Product Manager: connecting product requirements, technical feasibility, operating cost, user experience, and delivery evidence.
+
 I built this project as a technical assessment to show an end-to-end automation pipeline for mining intelligence.
 
 The system takes a list of mining companies, discovers relevant public pages, extracts structured data (leadership and assets), stores results in PostgreSQL, and exposes everything through API + UI. Semantic search is included as an optional bonus using `pgvector`.
