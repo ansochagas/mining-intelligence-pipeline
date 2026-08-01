@@ -165,6 +165,23 @@ npm run dev
 - `npm run assets:reextract`
 - `npm run cost:estimate -- --companies 10000`
 
+## AI-assisted development
+
+AI coding assistants were used to accelerate selected activities such as code exploration, initial scaffolding, documentation, refactoring suggestions, test-case generation, and implementation iterations.
+
+I remained responsible for:
+
+- product definition and scope;
+- requirements and acceptance criteria;
+- architecture and data-model decisions;
+- technical and product trade-offs;
+- review and validation of generated code;
+- security and credential hygiene;
+- testing, debugging, and final approval;
+- documentation of limitations and known risks.
+
+AI-generated suggestions were treated as proposals and were not accepted automatically. The final implementation was reviewed against product requirements, technical constraints, security considerations, and expected behavior.
+
 ## Delivery Evidence
 
 - `docs/quality-snapshot.md`: current quality and integrity indicators
